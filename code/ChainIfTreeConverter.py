@@ -5,7 +5,7 @@ import heapq
 import gc
 #import objgraph
 
-class PrefetchIfTreeConverter(TreeConverter):
+class ChainIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
@@ -29,12 +29,13 @@ class PrefetchIfTreeConverter(TreeConverter):
         else:
                 code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"    # Condition feature <= split
                 code += self.getImplementation(treeID, head.leftChild, level + 1)   # Insert leftChild, prefetch
-                code += """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild))
+                code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild))
+                code += self.chainProbChild(head, (head.leftChild), 4, "", tabs)
                 code += tabs + "} else {\n"     # else part
                 code += self.getImplementation(treeID, head.rightChild, level + 1)  # Insert rightChild, prefetch
-                code += """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild)) # what to prefetch
+                code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild))
+                code += self.chainProbChild(head, (head.rightChild), 4, "", tabs)
                 code += tabs + "}\n"
-
         return code
 
     def getCode(self, tree, treeID, numClasses):
@@ -68,4 +69,28 @@ class PrefetchIfTreeConverter(TreeConverter):
 
 
         return headerCode, cppCode
+
+    def chainProbChild(self, head, node, counter, code, tabs):
+        if counter > 0:
+            if node.probLeft is not None:
+                if node.probRight is not None:
+                    if (float(node.probLeft) < float(node.probRight)):
+                         code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild))
+                         return self.chainProbChild(head, node.rightChild, counter-1, code, tabs)
+                    else:
+                         code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild))
+                         return self.chainProbChild(head, node.leftChild, counter-1, code, tabs)
+                else:
+                     code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild))
+                     return self.chainProbChild(head, node.leftChild, counter-1, code, tabs)
+            else:
+                if node.probRight is not None:
+                     code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild))
+                     return self.chainProbChild(head, node.rightChild, counter-1, code, tabs)
+                else:
+                     code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.id))
+                     return self.chainProbChild(head, head, counter-1, code, tabs)
+        else:
+            return code
+
 

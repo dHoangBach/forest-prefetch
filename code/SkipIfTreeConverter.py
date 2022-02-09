@@ -5,7 +5,7 @@ import heapq
 import gc
 #import objgraph
 
-class PrefetchIfTreeConverter(TreeConverter):
+class SkipIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
@@ -29,12 +29,11 @@ class PrefetchIfTreeConverter(TreeConverter):
         else:
                 code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"    # Condition feature <= split
                 code += self.getImplementation(treeID, head.leftChild, level + 1)   # Insert leftChild, prefetch
-                code += """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild))
+                code += tabs + self.skipProbChild(head, (head.leftChild), 3)
                 code += tabs + "} else {\n"     # else part
                 code += self.getImplementation(treeID, head.rightChild, level + 1)  # Insert rightChild, prefetch
-                code += """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild)) # what to prefetch
+                code += tabs + self.skipProbChild(head, (head.rightChild), 3)
                 code += tabs + "}\n"
-
         return code
 
     def getCode(self, tree, treeID, numClasses):
@@ -68,4 +67,23 @@ class PrefetchIfTreeConverter(TreeConverter):
 
 
         return headerCode, cppCode
+
+    def skipProbChild(self, head, node, counter):
+        if counter > 0:
+            if node.probLeft is not None:
+                if node.probRight is not None:
+                    if (float(node.probLeft) < float(node.probRight)):
+                         return self.skipProbChild(head, node.rightChild, counter-1)
+                    else:
+                         return self.skipProbChild(head, node.leftChild, counter-1)
+                else:
+                     return self.skipProbChild(head, node.leftChild, counter-1)
+            else:
+                if node.probRight is not None:
+                     return self.skipProbChild(head, node.rightChild, counter-1)
+                else:
+                     return self.skipProbChild(head, head, counter-1)
+        else:
+            return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node))
+
 
