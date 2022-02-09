@@ -185,10 +185,10 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
                                         entry.append(nextIndexInArray-1)
                                         # print('Right child:', nextIndexInArray-1)
                         else: # but no rightChild
-                                entry.append(nextIndexInArray-1)
+                                entry.append(nextIndexInArray-2)
                 else: # when there is no leftChild
                         if node.probRight is not None:
-                                entry.append(nextIndexInArray-2)
+                                entry.append(nextIndexInArray-1)
                         else: # no rightChild too
                                 entry.append(0)
 

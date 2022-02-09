@@ -5,7 +5,7 @@ import heapq
 import gc
 #import objgraph
 
-class PrefetchIfTreeConverter(TreeConverter):
+class DoubleIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
@@ -29,12 +29,13 @@ class PrefetchIfTreeConverter(TreeConverter):
         else:
                 code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"    # Condition feature <= split
                 code += self.getImplementation(treeID, head.leftChild, level + 1)   # Insert leftChild, prefetch
-                code += """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild))
+                code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild))
+                code += tabs + self.getProbChild(head, (head.leftChild))
                 code += tabs + "} else {\n"     # else part
                 code += self.getImplementation(treeID, head.rightChild, level + 1)  # Insert rightChild, prefetch
-                code += """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild)) # what to prefetch
+                code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild))
+                code += tabs + self.getProbChild(head, (head.rightChild))
                 code += tabs + "}\n"
-
         return code
 
     def getCode(self, tree, treeID, numClasses):
@@ -68,4 +69,19 @@ class PrefetchIfTreeConverter(TreeConverter):
 
 
         return headerCode, cppCode
+
+    def getProbChild(self, head, node):
+        if node.probLeft is not None:
+                if node.probRight is not None:
+                    if (float(node.probLeft) < float(node.probRight)):
+                         return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild))
+                    else:
+                         return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild))
+                else:
+                     return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild))
+        else:
+                if node.probRight is not None:
+                     return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild))
+                else:
+                     return"""     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.id))
 

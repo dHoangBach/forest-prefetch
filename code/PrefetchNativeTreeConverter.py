@@ -185,10 +185,10 @@ class PrefetchNativeTreeConverter(PrefetchNativeTreeConverter):
                                         entry.append(nextIndexInArray-1)
                                         # print('Right child:', nextIndexInArray-1)
                         else: # but no rightChild
-                                entry.append(nextIndexInArray-1)
+                                entry.append(nextIndexInArray-2)
                 else: # when there is no leftChild
                         if node.probRight is not None:
-                                entry.append(nextIndexInArray-2)
+                                entry.append(nextIndexInArray-1)
                         else: # no rightChild too
                                 entry.append(head)
 
@@ -196,7 +196,6 @@ class PrefetchNativeTreeConverter(PrefetchNativeTreeConverter):
         
             featureType = self.getFeatureType()
             arrLen = len(arrayStructs)
-            # kh.chen
             #print("Get ArrayLenType")
             #print(self.getArrayLenType(len(arrayStructs)))
 
@@ -222,7 +221,6 @@ class PrefetchNativeTreeConverter(PrefetchNativeTreeConverter):
                                         
                                         if (!tree{treeID}[i].isLeaf) {
                                                 //std::cout << "leftChild: " << &tree{treeID}[tree{treeID}[tree{treeID}[i].leftChild].probChild] << std::endl;
-                                                // äußeres tree{treeID}[] weg, da wir nur den index wollen (?)
                                                 __builtin_prefetch ( &tree{treeID}[tree{treeID}[tree{treeID}[i].leftChild].probChild] );
                                         }
                                         i = tree{treeID}[i].leftChild;
