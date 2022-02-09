@@ -75,7 +75,6 @@ class PrefetchNativeTreeConverter(TreeConverter): # like a super class
             return headerCode
 
     def getCode(self, tree, treeID, numClasses):
-            # kh.chen
             # Note: this function has to be called once to traverse the tree to calculate the probabilities.
             tree.getProbAllPaths()
             cppCode, arrLen = self.getImplementation(tree.head, treeID)
@@ -106,7 +105,7 @@ class PrefetchNativeTreeConverter(TreeConverter): # like a super class
 
             return headerCode, cppCode
 
-class PrefetchNaiveNativeTreeConverter(PrefetchNativeTreeConverter):
+class PrefetchNativeTreeConverter(PrefetchNativeTreeConverter):
     def __init__(self, dim, namespace, featureType):
             super().__init__(dim, namespace, featureType)
 

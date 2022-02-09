@@ -106,7 +106,7 @@ class SkipNativeTreeConverter(TreeConverter): # like a super class
 
             return headerCode, cppCode
 
-class SkipNaiveNativeTreeConverter(SkipNativeTreeConverter):
+class SkipNativeTreeConverter(SkipNativeTreeConverter):
     def __init__(self, dim, namespace, featureType):
             super().__init__(dim, namespace, featureType)
 

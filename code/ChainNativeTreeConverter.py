@@ -2,7 +2,7 @@ from ForestConverter import TreeConverter
 import numpy as np
 import heapq
 
-class LoopNativeTreeConverter(TreeConverter): # like a super class
+class ChainNativeTreeConverter(TreeConverter): # like a super class
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
         # self.dim = dim
@@ -106,7 +106,7 @@ class LoopNativeTreeConverter(TreeConverter): # like a super class
 
             return headerCode, cppCode
 
-class LoopNaiveNativeTreeConverter(LoopNativeTreeConverter):
+class ChainNativeTreeConverter(ChainNativeTreeConverter):
     def __init__(self, dim, namespace, featureType):
             super().__init__(dim, namespace, featureType)
 
