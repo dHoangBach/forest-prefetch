@@ -5,7 +5,7 @@ import heapq
 import gc
 #import objgraph
 
-class PrefetchIfTreeConverter(TreeConverter):
+class RootIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
@@ -29,10 +29,10 @@ class PrefetchIfTreeConverter(TreeConverter):
         else:
                 code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"    # Condition feature <= split
                 code += self.getImplementation(treeID, head.leftChild, level + 1)   # Insert leftChild, prefetch
-                code += tabs + """    __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild))
+                code += tabs + """    __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head))
                 code += tabs + "} else {\n"     # else part
                 code += self.getImplementation(treeID, head.rightChild, level + 1)  # Insert rightChild, prefetch
-                code += tabs + """    __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild)) # what to prefetch
+                code += tabs + """    __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head)) # what to prefetch
                 code += tabs + "}\n"
 
         return code

@@ -32,5 +32,5 @@ cd ..
 ./compile.sh wine-quality intel
 
 # Run it
-./gather.sh wine-quality intel
+./collect.sh wine-quality intel
 ```
