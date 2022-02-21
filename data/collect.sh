@@ -20,11 +20,14 @@ for d in $(find ./$1/cpp/$2/*/ -type f -executable -name "test*Tree"); do
       cd $(dirname $d)
       bname=$(basename $d)
       prefix="test"
-      suffix="NativeTree"
-      suffix2="IfTree"
+      suffix="Tree"
+      #suffix2="IfTree"
+      #suffix3="NativeTree"
       methodname=${bname#$prefix}
       methodname=${methodname%$suffix}
-      methodname=${methodname%$suffix2}
+      #methodname=${methodname%$suffix2}
+      #methodname=${methodname%$suffix3}
+
       measurements="$(basename $(dirname $d)),$methodname,$(./$bname),$(stat --printf="%s" $bname)"
       cd ..
       echo $measurements >> collection.csv
