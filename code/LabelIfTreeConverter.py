@@ -9,7 +9,7 @@ class LabelIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
-    def getImplementation(self, treeID, head, level = 1):
+    def getImplementation(self, treeID, head, level = 1, start=0):
         """ Generate the actual if-else implementation for a given node
 
         Args:
@@ -28,16 +28,19 @@ class LabelIfTreeConverter(TreeConverter):
         if head.prediction is not None:
             return tabs + "    return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
-                code += tabs + "    if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
-                code += "label_{number}:\n".replace("{number}", str(head.leftChild))                
-                code += self.getImplementation(treeID, head.leftChild, level + 1)
-                code += tabs + self.getProbChild(head, head.leftChild)
+            if (start is 0):
+                code += "label_{number}:\n".replace("{number}", str(head))
+
+            code += tabs + "    if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
+            code += "label_{number}:\n".replace("{number}", str(head.leftChild))                
+            code += self.getImplementation(treeID, head.leftChild, level + 1, 1)
+            code += tabs + self.getProbChild(head, head.leftChild)
                 # else
-                code += tabs + "    } else {\n"
-                code += "label_{number}:\n".replace("{number}", str(head.rightChild))                
-                code += self.getImplementation(treeID, head.rightChild, level + 1)
-                code += tabs + self.getProbChild(head, head.rightChild)
-                code += tabs + "    }\n"
+            code += tabs + "    } else {\n"
+            code += "label_{number}:\n".replace("{number}", str(head.rightChild))                
+            code += self.getImplementation(treeID, head.rightChild, level + 1, 1)
+            code += tabs + self.getProbChild(head, head.rightChild)
+            code += tabs + "    }\n"
 
         return code
 
