@@ -72,26 +72,6 @@ class ForestConverter:
 		headerCode = "unsigned int {namespace}_predict({feature_t} const pX[{dim}]);\n".replace("{dim}", str(dim)).replace("{namespace}", namespace).replace("{feature_t}", featureType)
 		cppCode = "unsigned int {namespace}_predict({feature_t} const pX[{dim}]) {\n".replace("{dim}", str(dim)).replace("{namespace}", namespace).replace("{feature_t}", featureType)
 
-		# headerCode = "float {namespace}_predict({feature_t} const pX[{dim}]);\n".replace("{dim}", str(dim)).replace("{namespace}", namespace).replace("{feature_t}", featureType)
-		# cppCode = "float {namespace}_predict({feature_t} const pX[{dim}]) {\n".replace("{dim}", str(dim)).replace("{namespace}", namespace).replace("{feature_t}", featureType)
-		# cppCode += "float pred[{classes}] = {0};".replace("{classes}", str(numClasses))
-
-		# for i in range(len(forest.trees)):
-		# 	cppCode += "{namespace}_predict{id}(pX, pred);\n".replace("{id}", str(i)).replace("{namespace}", namespace)
-		# cppCode += """
-		# 	unsigned int i = 0;
-		# 	float max = pred[0];
-		# 	for (unsigned int j = 1; j < {numClasses}; ++j) {
-		# 		if (pred[j] > max) {
-		# 			max = pred[j];
-		# 			i = j;
-		# 		}
-		# 	}
-
-		# 	return i;
-		# """.replace("{numClasses}", str(numClasses))
-		# cppCode += "}"
-
 		initCode = "{"
 		for i in range(0,numClasses):
 			initCode += "0,"
@@ -201,10 +181,6 @@ class OptimizedNativeForestConverter:
 }\n"""
 		cppCode = cppCode.replace("{num_classes}", str(numClasses))
 
-		#for i in range(len(forest.trees)):
-		# TODO:  pass the whole forest in getCode, no loop here BEFORE: getCode(forest.trees[i], i)
-		#tHeader, tCode = self.treeConverter.getCode(forest, 99)
 		headerCode += tHeader
-		#cppCode += tCode
 
 		return headerCode, cppCode

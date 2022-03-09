@@ -12,8 +12,6 @@ class Forest:
 		self.trees = []
 
 	def fromSKLearn(self,forest,roundSplit = False):
-		# TODO: Add AdaBoostRegressor
-		# TODO: Add RandomForestRegressor
 
 		if (issubclass(type(forest), AdaBoostClassifier)):
 			sumW = sum([w for w in forest.estimator_weights_])
@@ -69,16 +67,6 @@ class Forest:
 			subTrees.append(subTree)
 		return subTrees
 
-	# def getAvgProb(self):
-	# 	return sum([t.getAvgProb() for t in self.trees]) / len(self.trees)
-
-	# def getMaxProb(self, n_top = 1):
-	# 	sums = np.array([0 for i in range(n_top)])
-	# 	for t in self.trees:
-	# 		sums = np.add(sums,t.getMaxProb(n_top))
-
-	# 	return sums / len(self.trees)
-
 	def getAvgDepth(self):
 		return sum([t.getAvgDepth() for t in self.trees]) / len(self.trees)
 
@@ -93,17 +81,7 @@ class Forest:
 			pred[c] += 1
 
 		return np.argmax(pred)
-		# pred = None
-		# i = 0
-		# for t in self.trees:
-		# 	i += 1
-		# 	if pred is None:
-		# 		pred = t.predict(x)
-		# 	else:
-		# 		tmp = t.predict(x) 
-		# 		pred += tmp
 
-		# return pred
 
 	def predict_batch(self,X):
 		YPred = []
@@ -118,38 +96,6 @@ class Forest:
 			YPred.append(np.argmax(pred))
 
 		return YPred
-		# YPred = []
-		# for x in X:
-		# 	pred = None
-		# 	i = 0
-		# 	for t in self.trees:
-		# 		i += 1
-		# 		if pred is None:
-		# 			pred = t.predict(x)
-		# 		else:
-		# 			tmp = t.predict(x) 
-		# 			pred += tmp
-		# 	YPred.append(pred.argmax())			
-
-		# return YPred
 
 	def getNumClasses(self):
 		return self.trees[0].getNumClasses()
-
-	# def getMaxDepth(self):
-	# 	return sum([t.getMaxDepth() for t in self.trees]) / len(self.trees)
-
-	# def getAvgNumNodes(self):
-	# 	return sum([t.getNumNodes() for t in self.trees]) / len(self.trees)
-
-	# def getAvgNumLeafs(self):
-	# 	return sum([t.getNumLeaf() for t in self.trees]) / len(self.trees)
-
-	# def getMaxNumLeafs(self):
-	# 	return max([t.getNumLeaf() for t in self.trees])
-
-	# def getMinNumLeafs(self):
-	# 	return min([t.getNumLeaf() for t in self.trees])
-
-	# def getAvgNumPaths(self):
-	# 	return sum([t.getNumLeaf() for t in self.trees]) / len(self.trees)

@@ -4,28 +4,35 @@ from functools import reduce
 import heapq
 import gc
 
-class ChainIfTreeConverter(TreeConverter):
+class LabelChainIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
-
         super().__init__(dim, namespace, featureType)
 
-    def getImplementation(self, treeID, head, level = 1):
-        
+    def getImplementation(self, treeID, head, level = 1, start=0):
+
         code = ""
         tabs = "".join(['\t' for i in range(level)])
 
+
         if head.prediction is not None:
-            return tabs + "return " + str(int(np.argmax(head.prediction))) + ";\n" ;
+            return tabs + "    return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
-                code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"    # Condition feature <= split
-                code += self.getImplementation(treeID, head.leftChild, level + 1)   # Insert leftChild, prefetch
-                code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild))
-                code += self.chainProbChild(head, (head.leftChild), 4, "", tabs)
-                code += tabs + "} else {\n"     # else part
-                code += self.getImplementation(treeID, head.rightChild, level + 1)  # Insert rightChild, prefetch
-                code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild))
-                code += self.chainProbChild(head, (head.rightChild), 4, "", tabs)
-                code += tabs + "}\n"
+            if (start is 0):
+                code += "label_{number}:\n".replace("{number}", str(head))
+
+            code += tabs + "    if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
+            code += "label_{number}:\n".replace("{number}", str(head.leftChild))                
+            code += self.getImplementation(treeID, head.leftChild, level + 1, 1)
+            code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(head.leftChild))
+            code += self.chainProbChild(head, (head.leftChild), 4, "", tabs)
+                # else
+            code += tabs + "    } else {\n"
+            code += "label_{number}:\n".replace("{number}", str(head.rightChild))                
+            code += self.getImplementation(treeID, head.rightChild, level + 1, 1)
+            code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(head.rightChild))
+            code += self.chainProbChild(head, (head.rightChild), 4, "", tabs)
+            code += tabs + "    }\n"
+
         return code
 
     def getCode(self, tree, treeID, numClasses):
@@ -56,22 +63,20 @@ class ChainIfTreeConverter(TreeConverter):
             if node.probLeft is not None:
                 if node.probRight is not None:
                     if (float(node.probLeft) < float(node.probRight)):
-                         code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild))
+                         code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(node.rightChild))
                          return self.chainProbChild(head, node.rightChild, counter-1, code, tabs)
                     else:
-                         code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild))
+                         code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(node.leftChild))
                          return self.chainProbChild(head, node.leftChild, counter-1, code, tabs)
                 else:
-                     code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild))
+                     code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(node.leftChild))
                      return self.chainProbChild(head, node.leftChild, counter-1, code, tabs)
             else:
                 if node.probRight is not None:
-                     code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild))
+                     code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(node.rightChild))
                      return self.chainProbChild(head, node.rightChild, counter-1, code, tabs)
                 else:
-                     code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head))
+                     code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(head))
                      return self.chainProbChild(head, head, counter-1, code, tabs)
         else:
             return code
-
-
