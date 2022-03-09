@@ -66,9 +66,6 @@ class Node:
 		if tree.children_left[curNode] == _tree.TREE_LEAF and tree.children_right[curNode] == _tree.TREE_LEAF:
 			# Get array of prediction probabilities for each class
 			proba = tree.value[curNode][0, :]  
-			#print(proba/sum(proba))
-			#print(proba)
-			#proba = proba / sum(proba)  #TODO??
 
 			nClasses = len(proba)
 
@@ -78,8 +75,7 @@ class Node:
 
 				proba = (nClasses - 1) * (log_proba - (1. / nClasses) * sum(log_proba))
 			elif skType == "RandomForest":
-				#proba = proba / tree.weighted_n_node_samples[curNode]
-				proba = proba / sum(proba)#tree.weighted_n_node_samples[curNode]
+				proba = proba / sum(proba)
 
 			self.prediction = proba * weight
 		else:
@@ -150,7 +146,6 @@ class Node:
 			sp = sp[:-1] + "]"
 
 			s += "\"prediction\":" + str(sp)
-			#s += "\"prediction\":\"" + str([]) + "\""
 		else:
 			s += "\"probLeft\":" + str(self.probLeft) + ","
 			s += "\"probRight\":" + str(self.probRight) + ","
@@ -165,4 +160,3 @@ class Node:
 
 	def predict(self,x):
 		return np.argmax(self.prediction)
-		#return np.array(self.prediction)

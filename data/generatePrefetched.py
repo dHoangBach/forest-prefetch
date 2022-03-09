@@ -38,6 +38,9 @@ from DoubleIfTreeConverter import*
 from SkipIfTreeConverter import*
 from ChainIfTreeConverter import*
 from LabelIfTreeConverter import*
+from LabelDoubleIfTreeConverter import*
+from LabelSkipIfTreeConverter import*
+from LabelChainIfTreeConverter import*
 from StaticNativeTreeConverter import*
 from RootNativeTreeConverter import*
 
@@ -378,6 +381,18 @@ all:
 			converter = ForestConverter(LabelIfTreeConverter(dim, "LabelIfTree", featureType))
 			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelIfTree", featureType, loadedForest, "../../../test.csv", reps)
 			Makefile += "\t$(COMPILER) $(FLAGS) LabelIfTree.h LabelIfTree.cpp testLabelIfTree.cpp -o testLabelIfTree" + "\n"
+
+			converter = ForestConverter(LabelDoubleIfTreeConverter(dim, "LabelDoubleIfTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelDoubleIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) LabelDoubleIfTree.h LabelDoubleIfTree.cpp testLabelDoubleIfTree.cpp -o testLabelDoubleIfTree" + "\n"
+
+			converter = ForestConverter(LabelSkipIfTreeConverter(dim, "LabelSkipIfTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelSkipIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) LabelSkipIfTree.h LabelSkipIfTree.cpp testLabelSkipIfTree.cpp -o testLabelSkipIfTree" + "\n"
+
+			converter = ForestConverter(LabelChainIfTreeConverter(dim, "LabelChainIfTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelChainIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) LabelChainIfTree.h LabelChainIfTree.cpp testLabelChainIfTree.cpp -o testLabelChainIfTree" + "\n"
 
 			print("\tGenerating NativeTrees")
 

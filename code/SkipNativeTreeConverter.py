@@ -2,14 +2,10 @@ from ForestConverter import TreeConverter
 import numpy as np
 import heapq
 
-class SkipNativeTreeConverter(TreeConverter): # like a super class
+class SkipNativeTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
-        # self.dim = dim
-	# self.namespace = namespace
-	# self.featureType = featureType
 
-        # Array type based on array length with either 8 bit, 16 bit or else
     def getArrayLenType(self, arrLen):
             arrayLenBit = int(np.log2(arrLen)) + 1
             if arrayLenBit <= 8:
@@ -75,8 +71,7 @@ class SkipNativeTreeConverter(TreeConverter): # like a super class
             return headerCode
 
     def getCode(self, tree, treeID, numClasses):
-            # kh.chen
-            # Note: this function has to be called once to traverse the tree to calculate the probabilities.
+
             tree.getProbAllPaths()
             cppCode, arrLen = self.getImplementation(tree.head, treeID)
 
@@ -156,8 +151,6 @@ class SkipNativeTreeConverter(SkipNativeTreeConverter):
                 if node.prediction is not None:
                     entry.append(1) #isLeaf
                     entry.append(int(np.argmax(node.prediction))) # prediction
-                    #entry.append(int(node.prediction.at(np.argmax(node.prediction)))
-                    #entry.append(node.id)
                     entry.append(0) # feature
                     entry.append(0) # split
                     entry.append(0) # leftChild
@@ -199,9 +192,6 @@ class SkipNativeTreeConverter(SkipNativeTreeConverter):
         
             featureType = self.getFeatureType()
             arrLen = len(arrayStructs)
-            # kh.chen
-            #print("Get ArrayLenType")
-            #print(self.getArrayLenType(len(arrayStructs)))
 
             cppCode = "#include <iostream>\n"
 

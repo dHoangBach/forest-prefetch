@@ -5,11 +5,7 @@ import heapq
 class DoubleNativeTreeConverter(TreeConverter): # like a super class
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
-        # self.dim = dim
-	# self.namespace = namespace
-	# self.featureType = featureType
 
-        # Array type based on array length with either 8 bit, 16 bit or else
     def getArrayLenType(self, arrLen):
             arrayLenBit = int(np.log2(arrLen)) + 1
             if arrayLenBit <= 8:
@@ -75,7 +71,7 @@ class DoubleNativeTreeConverter(TreeConverter): # like a super class
             return headerCode
 
     def getCode(self, tree, treeID, numClasses):
-            # Note: this function has to be called once to traverse the tree to calculate the probabilities.
+
             tree.getProbAllPaths()
             cppCode, arrLen = self.getImplementation(tree.head, treeID)
 
@@ -175,7 +171,6 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
                     nodes.append(node.rightChild) # fill with rightChild at the end of the array
 
                 # own code for prefetch:
-                # according to cpp code for wine-quality, it seems to work
                 if node.probLeft is not None: # when there is leftChild
                         if node.probRight is not None: # when there is rightChild too
                                 if node.probLeft > node.probRight:
@@ -196,9 +191,6 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
         
             featureType = self.getFeatureType()
             arrLen = len(arrayStructs)
-            # kh.chen
-            #print("Get ArrayLenType")
-            #print(self.getArrayLenType(len(arrayStructs)))
 
             cppCode = "#include <iostream>\n"
 

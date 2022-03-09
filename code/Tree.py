@@ -140,27 +140,13 @@ class Tree():
 				curPath.append(1)
 
 			pathNodes.append(node.id)
-			# try:
-			# 	pathNodes.index(node.id)
-			# 	#this node is root
-			# except ValueError:
-			# 	pathNodes.append(node.id)
-			# 	curPath.append(1)
 
 			curProb = reduce(lambda x, y: x*y, curPath)
 			node.pathProb = curProb
-			#print("Root or Split nodes "+str(node.id)+ " : " +str(curProb))
 			self.getProbAllPaths(node.leftChild, curPath + [node.probLeft], allPaths, pathNodes + [node.leftChild.id], pathLabels)
 			self.getProbAllPaths(node.rightChild, curPath + [node.probRight], allPaths, pathNodes + [node.rightChild.id], pathLabels)
 
 		return allPaths, pathLabels
-
-	# def getNumNodes(self):
-	# 	return len(self.nodes)
-
-	# def getMaxDepth(self):
-	# 	paths = self.getAllPaths()
-	# 	return max([len(p) for p in paths])
 
 	def getAvgDepth(self):
 		paths = self.getAllPaths()
@@ -235,13 +221,3 @@ class Tree():
 			YPred.append(self.predict(x).argmax())
 			
 		return YPred
-	# def getMaxProb(self, top_n = 1):
-	# 	paths = self.getAllPaths()
-	# 	probs = [reduce(lambda x, y: x*y, path) for path in paths]
-	# 	probs.sort(reverse=True)
-
-	# 	return probs[0:top_n]
-
-	# def getAvgProb(self):
-	# 	paths = self.getAllPaths()
-	# 	return sum( [reduce(lambda x, y: x*y, path) for path in paths] ) / len(paths)
