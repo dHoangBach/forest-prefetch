@@ -101,7 +101,7 @@ class ProbNativeTreeConverter(TreeConverter):
 
             return headerCode, cppCode
 
-class PrefetchNativeTreeConverter(PrefetchNativeTreeConverter):
+class ProbNativeTreeConverter(ProbNativeTreeConverter):
     def __init__(self, dim, namespace, featureType):
             super().__init__(dim, namespace, featureType)
 
