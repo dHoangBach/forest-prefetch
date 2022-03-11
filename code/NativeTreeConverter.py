@@ -155,7 +155,7 @@ class NaiveNativeTreeConverter(NativeTreeConverter):
                     entry.append(0)
                 else:
                     entry.append(0)
-                    entry.append(0) # COnstant prediction
+                    entry.append(0) # Constant prediction
                     entry.append(node.feature)
                     entry.append(node.split)
                     entry.append(nextIndexInArray)

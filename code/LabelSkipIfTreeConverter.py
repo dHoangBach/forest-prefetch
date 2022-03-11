@@ -17,7 +17,10 @@ class LabelSkipIfTreeConverter(TreeConverter):
         if head.prediction is not None:
             return tabs + "    return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
-            if (start is 0):
+
+# OWN CODING #######################################################################################################################
+
+            if (start is 0): # for root
                 code += "label_{number}:\n".replace("{number}", str(head))
 
             code += tabs + "    if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
@@ -30,8 +33,9 @@ class LabelSkipIfTreeConverter(TreeConverter):
             code += self.getImplementation(treeID, head.rightChild, level + 1, 1)
             code += tabs + self.skipProbChild(head, (head.rightChild), 3)
             code += tabs + "    }\n"
-
         return code
+
+####################################################################################################################################
 
     def getCode(self, tree, treeID, numClasses):
 
@@ -56,6 +60,8 @@ class LabelSkipIfTreeConverter(TreeConverter):
 
         return headerCode, cppCode
 
+# OWN CODING #######################################################################################################################
+
     def skipProbChild(self, head, node, counter):
         if counter > 0:
             if node.probLeft is not None:
@@ -74,3 +80,4 @@ class LabelSkipIfTreeConverter(TreeConverter):
         else:
             return """     __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(node))
 
+####################################################################################################################################

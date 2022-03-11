@@ -3,24 +3,12 @@ import numpy as np
 from functools import reduce
 import heapq
 import gc
-#import objgraph
 
-class LabelIfTreeConverter(TreeConverter):
+class LabelProbIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
     def getImplementation(self, treeID, head, level = 1, start=0):
-        """ Generate the actual if-else implementation for a given node
-
-        Args:
-            treeID (TYPE): The id of this tree (in case we are dealing with a forest)
-            head (TYPE): The current node to generate an if-else structure for.
-            level (int, optional): The intendation level of the generated code for easier
-                                                        reading of the generated code
-
-        Returns:
-            String: The actual if-else code as a string
-        """
         code = ""
         tabs = "".join(['\t' for i in range(level)])
 
@@ -28,7 +16,10 @@ class LabelIfTreeConverter(TreeConverter):
         if head.prediction is not None:
             return tabs + "    return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
-            if (start is 0):
+
+# OWN CODING #######################################################################################################################
+
+            if (start is 0): # for root
                 code += "label_{number}:\n".replace("{number}", str(head))
 
             code += tabs + "    if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
@@ -41,8 +32,9 @@ class LabelIfTreeConverter(TreeConverter):
             code += self.getImplementation(treeID, head.rightChild, level + 1, 1)
             code += tabs + self.getProbChild(head, head.rightChild)
             code += tabs + "    }\n"
-
         return code
+
+####################################################################################################################################
 
     def getCode(self, tree, treeID, numClasses):
         """ Generate the actual if-else implementation for a given tree
@@ -76,6 +68,8 @@ class LabelIfTreeConverter(TreeConverter):
 
         return headerCode, cppCode
 
+# OWN CODING #######################################################################################################################
+
     def getProbChild(self, head, node):
         if node.probLeft is not None:
                 if node.probRight is not None:
@@ -91,4 +85,5 @@ class LabelIfTreeConverter(TreeConverter):
                 else:
                      return"""     __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(head.id))
 
+####################################################################################################################################
 

@@ -2,7 +2,7 @@ from ForestConverter import TreeConverter
 import numpy as np
 import heapq
 
-class PrefetchNativeTreeConverter(TreeConverter):
+class ProbNativeTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
@@ -148,14 +148,14 @@ class PrefetchNativeTreeConverter(PrefetchNativeTreeConverter):
                 node = nodes.pop(0) # return first element which is a tree
                 entry = [] # temporary array
 
-                if node.prediction is not None:
+                if node.prediction is not None: # where node is a leaf
                     entry.append(1) #isLeaf
                     entry.append(int(np.argmax(node.prediction))) # prediction
                     entry.append(0) # feature
                     entry.append(0) # split
                     entry.append(0) # leftChild
                     entry.append(0) # rightChild
-                else:
+                else: # where node is not a leaf
                     entry.append(0) # isLeaf
                     entry.append(0) # Constant prediction
                     entry.append(node.feature) # feature
