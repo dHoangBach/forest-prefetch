@@ -4,7 +4,7 @@ from functools import reduce
 import heapq
 import gc
 
-class StaticIfTreeConverter(TreeConverter):
+class FeatProbIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
@@ -16,13 +16,14 @@ class StaticIfTreeConverter(TreeConverter):
         if head.prediction is not None:
             return tabs + "return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
-                code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"    # Condition feature <= split
-                code += self.getImplementation(treeID, head.leftChild, level + 1)   # Insert leftChild, prefetch
-                code += tabs + self.getProbChild(head, head)
+                code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
+                code += self.getImplementation(treeID, head.leftChild, level + 1)
+                code += tabs + self.getProbChild(head, head.leftChild)
                 code += tabs + "} else {\n"     # else part
-                code += self.getImplementation(treeID, head.rightChild, level + 1)  # Insert rightChild, prefetch
-                code += tabs + self.getProbChild(head, head)
+                code += self.getImplementation(treeID, head.rightChild, level + 1)
+                code += tabs + self.getProbChild(head, head.rightChild)
                 code += tabs + "}\n"
+
         return code
 
     def getCode(self, tree, treeID, numClasses):
@@ -44,22 +45,34 @@ class StaticIfTreeConverter(TreeConverter):
                                         .replace("{namespace}", self.namespace) \
                                         .replace("{feature_t}", featureType) \
                                         .replace("{numClasses}", str(numClasses))
-
-
         return headerCode, cppCode
 
     def getProbChild(self, head, node):
         if node.probLeft is not None:
                 if node.probRight is not None:
                     if (float(node.probLeft) < float(node.probRight)):
-                         return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild))
+                        if node.rightChild.feature is not None:
+                            return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild.feature))
+                        else:
+                            return ""
                     else:
-                         return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild))
+                        if node.leftChild.feature is not None:
+                             return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild.feature))
+                        else:
+                            return ""
                 else:
-                     return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild))
+                    if node.leftChild.feature is not None:
+                        return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild.feature))
+                    else:
+                        return ""
         else:
                 if node.probRight is not None:
-                     return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild))
+                    if node.rightChild.feature is not None:
+                        return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild.feature))
+                    else:
+                        return ""
                 else:
-                     return"""     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.id))
-
+                    if head.feature is not None:
+                        return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.feature))
+                    else:
+                        return ""

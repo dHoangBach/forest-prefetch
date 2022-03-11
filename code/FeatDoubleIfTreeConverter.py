@@ -4,37 +4,32 @@ from functools import reduce
 import heapq
 import gc
 
-class LabelDoubleIfTreeConverter(TreeConverter):
+class FeatDoubleIfTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
-    def getImplementation(self, treeID, head, level = 1, start=0):
+    def getImplementation(self, treeID, head, level = 1):
 
         code = ""
         tabs = "".join(['\t' for i in range(level)])
 
-
         if head.prediction is not None:
-            return tabs + "    return " + str(int(np.argmax(head.prediction))) + ";\n" ;
+            return tabs + "return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
 
 # OWN CODING #######################################################################################################################
 
-            if (start is 0): # for root
-                code += "label_{number}:\n".replace("{number}", str(head))
-
-            code += tabs + "    if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
-            code += "label_{number}:\n".replace("{number}", str(head.leftChild))                
-            code += self.getImplementation(treeID, head.leftChild, level + 1, 1)
-            code += tabs + """      __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(head.leftChild))
-            code += tabs + self.getProbChild(head, head.leftChild)
-                # else
-            code += tabs + "    } else {\n"
-            code += "label_{number}:\n".replace("{number}", str(head.rightChild))                
-            code += self.getImplementation(treeID, head.rightChild, level + 1, 1)
-            code += tabs + """      __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(head.rightChild))
-            code += tabs + self.getProbChild(head, head.rightChild)
-            code += tabs + "    }\n"
+                code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
+                code += self.getImplementation(treeID, head.leftChild, level + 1)
+                if head.leftChild.feature is not None:
+                    code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild.feature))
+                code += tabs + self.getProbChild(head, (head.leftChild))
+                code += tabs + "} else {\n"
+                code += self.getImplementation(treeID, head.rightChild, level + 1)
+                if head.rightChild.feature is not None:
+                    code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild.feature))
+                code += tabs + self.getProbChild(head, (head.rightChild))
+                code += tabs + "}\n"
         return code
 
 ####################################################################################################################################
@@ -68,15 +63,30 @@ class LabelDoubleIfTreeConverter(TreeConverter):
         if node.probLeft is not None:
                 if node.probRight is not None:
                     if (float(node.probLeft) < float(node.probRight)):
-                         return """     __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(node.rightChild))
+                        if node.rightChild.feature is not None:
+                            return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild.feature))
+                        else:
+                            return ""
                     else:
-                         return """     __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(node.leftChild))
+                        if node.leftChild.feature is not None:
+                             return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild.feature))
+                        else:
+                            return ""
                 else:
-                     return """     __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(node.leftChild))
+                    if node.leftChild.feature is not None:
+                        return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.leftChild.feature))
+                    else:
+                        return ""
         else:
                 if node.probRight is not None:
-                     return """     __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(node.rightChild))
+                    if node.rightChild.feature is not None:
+                        return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(node.rightChild.feature))
+                    else:
+                        return ""
                 else:
-                     return"""     __builtin_prefetch ( &&label_{number} );\n""".replace("{number}", str(head))
+                    if head.feature is not None:
+                        return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.feature))
+                    else:
+                        return ""
 
 ####################################################################################################################################

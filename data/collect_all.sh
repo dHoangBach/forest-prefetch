@@ -11,7 +11,7 @@ echo "path,filename,mean,variance,min,max,size" > collection_$1.csv
 
 for d in ./*/; do
 	if [ "$d" != "./__pycache__/" ]; then
-		#echo $d/cpp/$1/collection.csv
+		echo $d/cpp/$1/collection.csv
 	
 		if [ -f $d/cpp/$1/collection.csv ] ; then
 			rm $d/cpp/$1/collection.csv

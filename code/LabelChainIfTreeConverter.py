@@ -17,7 +17,10 @@ class LabelChainIfTreeConverter(TreeConverter):
         if head.prediction is not None:
             return tabs + "    return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
-            if (start is 0):
+
+# OWN CODING #######################################################################################################################
+
+            if (start is 0): # for root
                 code += "label_{number}:\n".replace("{number}", str(head))
 
             code += tabs + "    if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
@@ -32,8 +35,9 @@ class LabelChainIfTreeConverter(TreeConverter):
             code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(head.rightChild))
             code += self.chainProbChild(head, (head.rightChild), 4, "", tabs)
             code += tabs + "    }\n"
-
         return code
+
+####################################################################################################################################
 
     def getCode(self, tree, treeID, numClasses):
 
@@ -58,6 +62,8 @@ class LabelChainIfTreeConverter(TreeConverter):
 
         return headerCode, cppCode
 
+# OWN CODING #######################################################################################################################
+
     def chainProbChild(self, head, node, counter, code, tabs):
         if counter > 0:
             if node.probLeft is not None:
@@ -80,3 +86,5 @@ class LabelChainIfTreeConverter(TreeConverter):
                      return self.chainProbChild(head, head, counter-1, code, tabs)
         else:
             return code
+
+####################################################################################################################################
