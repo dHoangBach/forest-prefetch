@@ -76,27 +76,21 @@ def fitModels(roundSplit,XTrain,YTrain,XTest = None,YTest = None,createTest = Fa
 
 				outFile.write(line + "\n")
 
-	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=1,n_jobs=8,max_depth=5),"DT_5_1")
+	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=1,n_jobs=8,max_depth=5),"DT_5_1")
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=1,n_jobs=8,max_depth=15),"DT_15_1")
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=1,n_jobs=8,max_depth=30),"DT_30_1")
-	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=20,n_jobs=8,max_depth=15),"RF_15_20")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=50,n_jobs=8,max_depth=5),"RF_5_50")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=50,n_jobs=8,max_depth=15),"RF_15_50")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=50,n_jobs=8,max_depth=30),"RF_30_50")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=100,n_jobs=8,max_depth=5),"RF_5_100")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=100,n_jobs=8,max_depth=15),"RF_15_100")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=100,n_jobs=8,max_depth=30),"RF_30_100")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=200,n_jobs=8,max_depth=5),"RF_5_200")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=200,n_jobs=8,max_depth=15),"RF_15_200")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=200,n_jobs=8,max_depth=30),"RF_30_200")
-
-
-
-
-	# testModel(XTrain,YTrain,XTest,YTest,DecisionTreeClassifier(max_depth=1),"DT_1")
-	# testModel(XTrain,YTrain,XTest,YTest,DecisionTreeClassifier(max_depth=5),"DT_5")
-	# testModel(XTrain,YTrain,XTest,YTest,DecisionTreeClassifier(max_depth=15),"DT_15")
-	# testModel(XTrain,YTrain,XTest,YTest,DecisionTreeClassifier(max_depth=None),"DT_unlimited")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=8,max_depth=5),"RF_5_25")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=8,max_depth=15),"RF_15_25")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=8,max_depth=30),"RF_30_25")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=50,n_jobs=8,max_depth=5),"RF_5_50")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=50,n_jobs=8,max_depth=15),"RF_15_50")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=50,n_jobs=8,max_depth=30),"RF_30_50")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=100,n_jobs=8,max_depth=5),"RF_5_100")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=100,n_jobs=8,max_depth=15),"RF_15_100")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=100,n_jobs=8,max_depth=30),"RF_30_100")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=150,n_jobs=8,max_depth=5),"RF_5_150")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=150,n_jobs=8,max_depth=15),"RF_15_150")
+	testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=150,n_jobs=8,max_depth=30),"RF_30_150")
 
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=1,n_jobs=8,max_depth=1),"DT_1")
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=1,n_jobs=8,max_depth=5),"DT_5")
@@ -108,13 +102,6 @@ def fitModels(roundSplit,XTrain,YTrain,XTest = None,YTest = None,createTest = Fa
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=1,n_jobs=8,max_depth=45),"DT_45")
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=1,n_jobs=8,max_depth=50),"DT_50")
 
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,ExtraTreesClassifier(n_estimators=25,n_jobs=8,max_depth=1),"ET_1")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,ExtraTreesClassifier(n_estimators=25,n_jobs=8,max_depth=5),"ET_5")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,ExtraTreesClassifier(n_estimators=25,n_jobs=8,max_depth=10),"ET_10")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,ExtraTreesClassifier(n_estimators=25,n_jobs=8,max_depth=15),"ET_15")
-	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,ExtraTreesClassifier(n_estimators=25,n_jobs=8,max_depth=20),"ET_20")
-	#testModel(XTrain,YTrain,XTest,YTest,ExtraTreesClassifier(n_estimators=25,n_jobs=4,max_depth=None),"ET_unlimited")
-
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=8,max_depth=1),"RF_1")
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=8,max_depth=5),"RF_5")
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=8,max_depth=10),"RF_10")
@@ -124,7 +111,3 @@ def fitModels(roundSplit,XTrain,YTrain,XTest = None,YTest = None,createTest = Fa
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=8,max_depth=45),"RF_45")
 	#testModel(roundSplit,XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=8,max_depth=50),"RF_50")
 	#testModel(XTrain,YTrain,XTest,YTest,RandomForestClassifier(n_estimators=25,n_jobs=4,max_depth=None),"RF_unlimited")
-
-	#testModel(XTrain,YTrain,XTest,YTest,AdaBoostClassifier(n_estimators=50,base_estimator=DecisionTreeClassifier(max_depth=1)),"AB_1")
-	#testModel(XTrain,YTrain,XTest,YTest,AdaBoostClassifier(n_estimators=50,base_estimator=DecisionTreeClassifier(max_depth=3)),"AB_3")
-	#testModel(XTrain,YTrain,XTest,YTest,AdaBoostClassifier(n_estimators=50,base_estimator=DecisionTreeClassifier(max_depth=5)),"AB_5")
