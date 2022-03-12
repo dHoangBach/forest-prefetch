@@ -16,11 +16,9 @@ class SkipNativeTreeConverter(TreeConverter):
                     arrayLenDataType = "unsigned int"
             return arrayLenDataType
 
-        # 'Abstract method'
     def getImplementation(self, head, treeID):
         raise NotImplementedError("This function should not be called directly, but only by a sub-class")
 
-        # set header code
     def getHeader(self, splitType, treeID, arrLen, numClasses):
             dimBit = int(np.log2(self.dim)) + 1 if self.dim != 0 else 1
 
@@ -34,8 +32,6 @@ class SkipNativeTreeConverter(TreeConverter):
             featureType = self.getFeatureType()
             if (numClasses == 2):
                 headerCode = """struct {namespace}_Node{treeID} {
-                        //bool isLeaf;
-                        //unsigned int prediction;
                         {dimDataType} feature;
                         {splitType} split;
                         {arrayLenDataType} leftChild;
@@ -168,7 +164,8 @@ class SkipNativeTreeConverter(SkipNativeTreeConverter):
                     nodes.append(node.leftChild) # fill with leftChild at the end of the array
                     nodes.append(node.rightChild) # fill with rightChild at the end of the array
 
-                # own code for prefetch:
+# OWN CODING #######################################################################################################################
+
                 counter = 4 # 'depth'
                 currentNode = node
                 while (counter > 1):
@@ -188,6 +185,9 @@ class SkipNativeTreeConverter(SkipNativeTreeConverter):
                                     counter = 0
                     counter -= 1
                 entry.append(currentNode) # node that is going to be prefetched, node and node.id are similar
+
+####################################################################################################################################
+
                 arrayStructs.append(entry) # temporary array 'entry' will be append on further used arrayStructs
         
             featureType = self.getFeatureType()
@@ -207,6 +207,8 @@ class SkipNativeTreeConverter(SkipNativeTreeConverter):
                     cppCode = cppCode[:-1] + "},"
             cppCode = cppCode[:-1] + "};"
 
+# OWN CODING #######################################################################################################################ss
+
             cppCode += """
                     inline unsigned int {namespace}_predict{treeID}({feature_t} const pX[{dim}]){
                             {arrayLenDataType} i = 0;
@@ -225,5 +227,7 @@ class SkipNativeTreeConverter(SkipNativeTreeConverter):
                .replace("{namespace}", self.namespace) \
                .replace("{arrayLenDataType}",self.getArrayLenType(len(arrayStructs))) \
                .replace("{feature_t}", featureType)
+
+####################################################################################################################################
 
             return cppCode, arrLen

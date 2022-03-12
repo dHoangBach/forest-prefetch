@@ -2,7 +2,7 @@ from ForestConverter import TreeConverter
 import numpy as np
 import heapq
 
-class DoubleNativeTreeConverter(TreeConverter): # like a super class
+class DoubleNativeTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
@@ -16,11 +16,9 @@ class DoubleNativeTreeConverter(TreeConverter): # like a super class
                     arrayLenDataType = "unsigned int"
             return arrayLenDataType
 
-        # 'Abstract method'
     def getImplementation(self, head, treeID):
         raise NotImplementedError("This function should not be called directly, but only by a sub-class")
 
-        # set header code
     def getHeader(self, splitType, treeID, arrLen, numClasses):
             dimBit = int(np.log2(self.dim)) + 1 if self.dim != 0 else 1
 
@@ -34,8 +32,6 @@ class DoubleNativeTreeConverter(TreeConverter): # like a super class
             featureType = self.getFeatureType()
             if (numClasses == 2):
                 headerCode = """struct {namespace}_Node{treeID} {
-                        //bool isLeaf;
-                        //unsigned int prediction;
                         {dimDataType} feature;
                         {splitType} split;
                         {arrayLenDataType} leftChild;
@@ -50,7 +46,6 @@ class DoubleNativeTreeConverter(TreeConverter): # like a super class
                            .replace("{arrayLenDataType}", self.getArrayLenType(arrLen))
             else: # here is no prediction included
                 headerCode = """struct {namespace}_Node{treeID} {
-                           //bool isLeaf;
                             {dimDataType} feature;
                             {splitType} split;
                             {arrayLenDataType} leftChild;
@@ -71,7 +66,6 @@ class DoubleNativeTreeConverter(TreeConverter): # like a super class
             return headerCode
 
     def getCode(self, tree, treeID, numClasses):
-
             tree.getProbAllPaths()
             cppCode, arrLen = self.getImplementation(tree.head, treeID)
 
@@ -141,8 +135,6 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
     def getImplementation(self, head, treeID):
             arrayStructs = []
             nextIndexInArray = 1 # always one index ahead of current index
-
-            # Breitensuche
             nodes = [head] # nodes is an array initiated with the root of the tree
             while len(nodes) > 0:
                 node = nodes.pop(0) # return first element which is a tree
@@ -151,8 +143,6 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
                 if node.prediction is not None:
                     entry.append(1) #isLeaf
                     entry.append(int(np.argmax(node.prediction))) # prediction
-                    #entry.append(int(node.prediction.at(np.argmax(node.prediction)))
-                    #entry.append(node.id)
                     entry.append(0) # feature
                     entry.append(0) # split
                     entry.append(0) # leftChild
@@ -170,7 +160,8 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
                     nodes.append(node.leftChild) # fill with leftChild at the end of the array
                     nodes.append(node.rightChild) # fill with rightChild at the end of the array
 
-                # own code for prefetch:
+# OWN CODING #######################################################################################################################
+
                 if node.probLeft is not None: # when there is leftChild
                         if node.probRight is not None: # when there is rightChild too
                                 if node.probLeft > node.probRight:
@@ -186,6 +177,8 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
                                 entry.append(nextIndexInArray-1)
                         else: # no rightChild too
                                 entry.append(0)
+
+####################################################################################################################################
 
                 arrayStructs.append(entry) # temporary array 'entry' will be append on further used arrayStructs
         
@@ -205,6 +198,8 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
                             cppCode += str(val) + ","
                     cppCode = cppCode[:-1] + "},"
             cppCode = cppCode[:-1] + "};"
+
+# OWN CODING #######################################################################################################################
 
             cppCode += """
                     inline unsigned int {namespace}_predict{treeID}({feature_t} const pX[{dim}]){
@@ -236,5 +231,7 @@ class DoubleNativeTreeConverter(DoubleNativeTreeConverter):
                .replace("{namespace}", self.namespace) \
                .replace("{arrayLenDataType}",self.getArrayLenType(len(arrayStructs))) \
                .replace("{feature_t}", featureType)
+
+####################################################################################################################################
 
             return cppCode, arrLen

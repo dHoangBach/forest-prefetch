@@ -12,7 +12,6 @@ class LabelProbIfTreeConverter(TreeConverter):
         code = ""
         tabs = "".join(['\t' for i in range(level)])
 
-
         if head.prediction is not None:
             return tabs + "    return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:

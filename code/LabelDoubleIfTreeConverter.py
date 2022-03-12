@@ -9,10 +9,8 @@ class LabelDoubleIfTreeConverter(TreeConverter):
         super().__init__(dim, namespace, featureType)
 
     def getImplementation(self, treeID, head, level = 1, start=0):
-
         code = ""
         tabs = "".join(['\t' for i in range(level)])
-
 
         if head.prediction is not None:
             return tabs + "    return " + str(int(np.argmax(head.prediction))) + ";\n" ;

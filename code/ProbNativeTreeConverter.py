@@ -71,7 +71,6 @@ class ProbNativeTreeConverter(TreeConverter):
             return headerCode
 
     def getCode(self, tree, treeID, numClasses):
-
             tree.getProbAllPaths()
             cppCode, arrLen = self.getImplementation(tree.head, treeID)
 
@@ -168,7 +167,8 @@ class ProbNativeTreeConverter(ProbNativeTreeConverter):
                     nodes.append(node.leftChild) # fill with leftChild at the end of the array
                     nodes.append(node.rightChild) # fill with rightChild at the end of the array
 
-                # own code for prefetch:
+# OWN CODING #######################################################################################################################
+
                 if node.probLeft is not None: # when there is leftChild
                         if node.probRight is not None: # when there is rightChild too
                                 if node.probLeft > node.probRight:
@@ -184,6 +184,8 @@ class ProbNativeTreeConverter(ProbNativeTreeConverter):
                                 entry.append(nextIndexInArray-1)
                         else: # no rightChild too
                                 entry.append(head)
+
+####################################################################################################################################
 
                 arrayStructs.append(entry) # temporary array 'entry' will be append on further used arrayStructs
         
@@ -203,6 +205,8 @@ class ProbNativeTreeConverter(ProbNativeTreeConverter):
                             cppCode += str(val) + ","
                     cppCode = cppCode[:-1] + "},"
             cppCode = cppCode[:-1] + "};"
+
+# OWN CODING #######################################################################################################################
 
             cppCode += """
                     inline unsigned int {namespace}_predict{treeID}({feature_t} const pX[{dim}]){
@@ -231,5 +235,7 @@ class ProbNativeTreeConverter(ProbNativeTreeConverter):
                .replace("{namespace}", self.namespace) \
                .replace("{arrayLenDataType}",self.getArrayLenType(len(arrayStructs))) \
                .replace("{feature_t}", featureType)
+
+####################################################################################################################################
 
             return cppCode, arrLen
