@@ -2,7 +2,7 @@ from ForestConverter import TreeConverter
 import numpy as np
 import heapq
 
-class ChainNativeTreeConverter(TreeConverter): # like a super class
+class ChainNativeTreeConverter(TreeConverter):
     def __init__(self, dim, namespace, featureType):
         super().__init__(dim, namespace, featureType)
 
@@ -16,11 +16,9 @@ class ChainNativeTreeConverter(TreeConverter): # like a super class
                     arrayLenDataType = "unsigned int"
             return arrayLenDataType
 
-        # 'Abstract method'
     def getImplementation(self, head, treeID):
         raise NotImplementedError("This function should not be called directly, but only by a sub-class")
 
-        # set header code
     def getHeader(self, splitType, treeID, arrLen, numClasses):
 
             dimBit = int(np.log2(self.dim)) + 1 if self.dim != 0 else 1
@@ -35,8 +33,6 @@ class ChainNativeTreeConverter(TreeConverter): # like a super class
             featureType = self.getFeatureType()
             if (numClasses == 2):
                 headerCode = """struct {namespace}_Node{treeID} {
-                        //bool isLeaf;
-                        //unsigned int prediction;
                         {dimDataType} feature;
                         {splitType} split;
                         {arrayLenDataType} leftChild;
@@ -51,7 +47,6 @@ class ChainNativeTreeConverter(TreeConverter): # like a super class
                            .replace("{arrayLenDataType}", self.getArrayLenType(arrLen))
             else: # here is no prediction included
                 headerCode = """struct {namespace}_Node{treeID} {
-                           //bool isLeaf;
                             {dimDataType} feature;
                             {splitType} split;
                             {arrayLenDataType} leftChild;
@@ -72,7 +67,6 @@ class ChainNativeTreeConverter(TreeConverter): # like a super class
             return headerCode
 
     def getCode(self, tree, treeID, numClasses):
-
             tree.getProbAllPaths()
             cppCode, arrLen = self.getImplementation(tree.head, treeID)
 
@@ -142,15 +136,13 @@ class ChainNativeTreeConverter(ChainNativeTreeConverter):
     def getImplementation(self, head, treeID):
             arrayStructs = []
             nextIndexInArray = 1 # always one index ahead of current index
-
-            # Breitensuche
             nodes = [head] # nodes is an array initiated with the root of the tree
             while len(nodes) > 0:
                 node = nodes.pop(0) # return first element which is a tree
                 entry = [] # temporary array
 
                 if node.prediction is not None:
-                    entry.append(1) #isLeaf
+                    entry.append(1) # isLeaf
                     entry.append(int(np.argmax(node.prediction))) # prediction
                     entry.append(0) # feature
                     entry.append(0) # split
@@ -169,16 +161,14 @@ class ChainNativeTreeConverter(ChainNativeTreeConverter):
                     nodes.append(node.leftChild) # fill with leftChild at the end of the array
                     nodes.append(node.rightChild) # fill with rightChild at the end of the array
 
-                # own code for prefetch:
-                # according to cpp code for wine-quality, it seems to work
+# OWN CODING #######################################################################################################################
+
                 if node.probLeft is not None: # when there is leftChild
                         if node.probRight is not None: # when there is rightChild too
                                 if node.probLeft > node.probRight:
                                         entry.append(nextIndexInArray-2)
-                                        # print('Left child:', nextIndexInArray-2)
                                 else:
                                         entry.append(nextIndexInArray-1)
-                                        # print('Right child:', nextIndexInArray-1)
                         else: # but no rightChild
                                 entry.append(nextIndexInArray-2)
                 else: # when there is no leftChild
@@ -187,13 +177,13 @@ class ChainNativeTreeConverter(ChainNativeTreeConverter):
                         else: # no rightChild too
                                 entry.append(0)
 
+####################################################################################################################################
+
                 arrayStructs.append(entry) # temporary array 'entry' will be append on further used arrayStructs
         
             featureType = self.getFeatureType()
             arrLen = len(arrayStructs)
-
             cppCode = "#include <iostream>\n"
-
             cppCode += "{namespace}_Node{treeID} const tree{treeID}[{N}] = {" \
                     .replace("{treeID}", str(treeID)) \
                     .replace("{N}", str(len(arrayStructs))) \
@@ -220,6 +210,8 @@ class ChainNativeTreeConverter(ChainNativeTreeConverter):
                                     .replace("{feature_t}", featureType) \
                                     .replace("{arrayLenDataType}",self.getArrayLenType(len(arrayStructs)))
 
+# OWN CODING #######################################################################################################################
+
             counter = 5 # amount of prefetches
             current = "i" # initial value
             cppCode += """
@@ -231,6 +223,8 @@ class ChainNativeTreeConverter(ChainNativeTreeConverter):
                                                                                                  .replace("{treeID}", str(treeID))
                 current = "tree{treeID}[" + current + "].probChild"
                 counter -= 1
+                
+####################################################################################################################################
 
             cppCode += """
                         }

@@ -9,7 +9,6 @@ class FeatProbIfTreeConverter(TreeConverter):
         super().__init__(dim, namespace, featureType)
 
     def getImplementation(self, treeID, head, level = 1):
-
         code = ""
         tabs = "".join(['\t' for i in range(level)])
 
@@ -17,12 +16,17 @@ class FeatProbIfTreeConverter(TreeConverter):
             return tabs + "return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
                 code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
+
+# OWN CODING #######################################################################################################################
+
                 code += self.getImplementation(treeID, head.leftChild, level + 1)
                 code += tabs + self.getProbChild(head, head.leftChild)
                 code += tabs + "} else {\n"     # else part
                 code += self.getImplementation(treeID, head.rightChild, level + 1)
                 code += tabs + self.getProbChild(head, head.rightChild)
                 code += tabs + "}\n"
+
+####################################################################################################################################
 
         return code
 
@@ -46,6 +50,8 @@ class FeatProbIfTreeConverter(TreeConverter):
                                         .replace("{feature_t}", featureType) \
                                         .replace("{numClasses}", str(numClasses))
         return headerCode, cppCode
+
+# OWN CODING #######################################################################################################################
 
     def getProbChild(self, head, node):
         if node.probLeft is not None:
@@ -76,3 +82,5 @@ class FeatProbIfTreeConverter(TreeConverter):
                         return """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.feature))
                     else:
                         return ""
+
+####################################################################################################################################

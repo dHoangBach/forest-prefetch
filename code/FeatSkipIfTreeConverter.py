@@ -9,7 +9,6 @@ class FeatSkipIfTreeConverter(TreeConverter):
         super().__init__(dim, namespace, featureType)
 
     def getImplementation(self, treeID, head, level = 1):
-
         code = ""
         tabs = "".join(['\t' for i in range(level)])
 
@@ -17,12 +16,18 @@ class FeatSkipIfTreeConverter(TreeConverter):
             return tabs + "return " + str(int(np.argmax(head.prediction))) + ";\n" ;
         else:
                 code += tabs + "if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
+
+# OWN CODING #######################################################################################################################
+
                 code += self.getImplementation(treeID, head.leftChild, level + 1)
                 code += tabs + self.skipProbChild(head, (head.leftChild), 3)
                 code += tabs + "} else {\n"     # else part
                 code += self.getImplementation(treeID, head.rightChild, level + 1)
                 code += tabs + self.skipProbChild(head, (head.rightChild), 3)
                 code += tabs + "}\n"
+
+####################################################################################################################################
+
         return code
 
     def getCode(self, tree, treeID, numClasses):
@@ -69,4 +74,4 @@ class FeatSkipIfTreeConverter(TreeConverter):
             else:
                 return ""
 
-
+####################################################################################################################################

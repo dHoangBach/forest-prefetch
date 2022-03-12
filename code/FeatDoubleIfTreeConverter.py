@@ -9,7 +9,6 @@ class FeatDoubleIfTreeConverter(TreeConverter):
         super().__init__(dim, namespace, featureType)
 
     def getImplementation(self, treeID, head, level = 1):
-
         code = ""
         tabs = "".join(['\t' for i in range(level)])
 
