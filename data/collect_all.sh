@@ -7,7 +7,7 @@ then
 fi
 
 
-echo "path,filename,mean,variance,min,max,size" > collection_$1.csv
+#echo "path,filename,mean,variance,min,max,size" > collection_$1.csv
 
 for d in ./*/; do
 	if [ "$d" != "./__pycache__/" ]; then
@@ -19,6 +19,6 @@ for d in ./*/; do
 
 		echo "Profiling $d"
 		./collect.sh $d $1
-		cat $d/cpp/$1/collection.csv >> collection_$1.csv
+		#cat $d/cpp/$1/collection.csv >> collection_$1.csv
 	fi
 done
