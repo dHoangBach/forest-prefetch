@@ -361,72 +361,72 @@ FLAGS = -std=c++11 -Wall -O3 -funroll-loops -ftree-vectorize -Wno-unused-label
 
 all:
 """
-			print("\tGenerating If-Trees")
-			converter = ForestConverter(StandardIFTreeConverter(dim, "StandardIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "StandardIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) StandardIfTree.h StandardIfTree.cpp testStandardIfTree.cpp -o testStandardIfTree" + "\n"
+			#print("\tGenerating If-Trees")
+			#converter = ForestConverter(StandardIFTreeConverter(dim, "StandardIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "StandardIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) StandardIfTree.h StandardIfTree.cpp testStandardIfTree.cpp -o testStandardIfTree" + "\n"
 
-			converter = ForestConverter(FeatProbIfTreeConverter(dim, "FeatProbIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "FeatProbIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) FeatProbIfTree.h FeatProbIfTree.cpp testFeatProbIfTree.cpp -o testFeatProbIfTree" + "\n"
+			#converter = ForestConverter(FeatProbIfTreeConverter(dim, "FeatProbIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "FeatProbIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) FeatProbIfTree.h FeatProbIfTree.cpp testFeatProbIfTree.cpp -o testFeatProbIfTree" + "\n"
 
-			converter = ForestConverter(FeatDoubleIfTreeConverter(dim, "FeatDoubleIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "FeatDoubleIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) FeatDoubleIfTree.h FeatDoubleIfTree.cpp testFeatDoubleIfTree.cpp -o testFeatDoubleIfTree" + "\n"
+			#converter = ForestConverter(FeatDoubleIfTreeConverter(dim, "FeatDoubleIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "FeatDoubleIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) FeatDoubleIfTree.h FeatDoubleIfTree.cpp testFeatDoubleIfTree.cpp -o testFeatDoubleIfTree" + "\n"
 
-			converter = ForestConverter(FeatChainIfTreeConverter(dim, "FeatChainIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "FeatChainIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) FeatChainIfTree.h FeatChainIfTree.cpp testFeatChainIfTree.cpp -o testFeatChainIfTree" + "\n"
+			#converter = ForestConverter(FeatChainIfTreeConverter(dim, "FeatChainIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "FeatChainIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) FeatChainIfTree.h FeatChainIfTree.cpp testFeatChainIfTree.cpp -o testFeatChainIfTree" + "\n"
 
-			converter = ForestConverter(FeatSkipIfTreeConverter(dim, "FeatSkipIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "FeatSkipIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) FeatSkipIfTree.h FeatSkipIfTree.cpp testFeatSkipIfTree.cpp -o testFeatSkipIfTree" + "\n"
+			#converter = ForestConverter(FeatSkipIfTreeConverter(dim, "FeatSkipIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "FeatSkipIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) FeatSkipIfTree.h FeatSkipIfTree.cpp testFeatSkipIfTree.cpp -o testFeatSkipIfTree" + "\n"
 
-			converter = ForestConverter(LabelProbIfTreeConverter(dim, "LabelProbIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelProbIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) LabelProbIfTree.h LabelProbIfTree.cpp testLabelProbIfTree.cpp -o testLabelProbIfTree" + "\n"
+			#converter = ForestConverter(LabelProbIfTreeConverter(dim, "LabelProbIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelProbIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) LabelProbIfTree.h LabelProbIfTree.cpp testLabelProbIfTree.cpp -o testLabelProbIfTree" + "\n"
 
-			converter = ForestConverter(LabelDoubleIfTreeConverter(dim, "LabelDoubleIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelDoubleIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) LabelDoubleIfTree.h LabelDoubleIfTree.cpp testLabelDoubleIfTree.cpp -o testLabelDoubleIfTree" + "\n"
+			#converter = ForestConverter(LabelDoubleIfTreeConverter(dim, "LabelDoubleIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelDoubleIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) LabelDoubleIfTree.h LabelDoubleIfTree.cpp testLabelDoubleIfTree.cpp -o testLabelDoubleIfTree" + "\n"
 
-			converter = ForestConverter(LabelSkipIfTreeConverter(dim, "LabelSkipIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelSkipIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) LabelSkipIfTree.h LabelSkipIfTree.cpp testLabelSkipIfTree.cpp -o testLabelSkipIfTree" + "\n"
+			#converter = ForestConverter(LabelSkipIfTreeConverter(dim, "LabelSkipIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelSkipIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) LabelSkipIfTree.h LabelSkipIfTree.cpp testLabelSkipIfTree.cpp -o testLabelSkipIfTree" + "\n"
 
-			converter = ForestConverter(LabelChainIfTreeConverter(dim, "LabelChainIfTree", featureType))
-			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelChainIfTree", featureType, loadedForest, "../../../test.csv", reps)
-			Makefile += "\t$(COMPILER) $(FLAGS) LabelChainIfTree.h LabelChainIfTree.cpp testLabelChainIfTree.cpp -o testLabelChainIfTree" + "\n"
+			#converter = ForestConverter(LabelChainIfTreeConverter(dim, "LabelChainIfTree", featureType))
+			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "LabelChainIfTree", featureType, loadedForest, "../../../test.csv", reps)
+			#Makefile += "\t$(COMPILER) $(FLAGS) LabelChainIfTree.h LabelChainIfTree.cpp testLabelChainIfTree.cpp -o testLabelChainIfTree" + "\n"
 
 			print("\tGenerating NativeTrees")
 
-			#converter = ForestConverter(NaiveNativeTreeConverter(dim, "NaiveNativeTree", featureType))
-			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "NaiveNativeTree", featureType, loadedForest, "../../../test.csv", reps)
-			#Makefile += "\t$(COMPILER) $(FLAGS) NaiveNativeTree.h NaiveNativeTree.cpp testNaiveNativeTree.cpp -o testNaiveNativeTree\n"
+			converter = ForestConverter(NaiveNativeTreeConverter(dim, "NaiveNativeTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "NaiveNativeTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) NaiveNativeTree.h NaiveNativeTree.cpp testNaiveNativeTree.cpp -o testNaiveNativeTree\n"
 
-			#converter = ForestConverter(ProbNativeTreeConverter(dim, "ProbNativeTree", featureType))
-			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "ProbNativeTree", featureType, loadedForest, "../../../test.csv", reps)
-			#Makefile += "\t$(COMPILER) $(FLAGS) ProbNativeTree.h ProbNativeTree.cpp testProbNativeTree.cpp -o testProbNativeTree\n"
+			converter = ForestConverter(ProbNativeTreeConverter(dim, "ProbNativeTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "ProbNativeTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) ProbNativeTree.h ProbNativeTree.cpp testProbNativeTree.cpp -o testProbNativeTree\n"
 
-			#converter = ForestConverter(DoubleNativeTreeConverter(dim, "DoubleNativeTree", featureType))
-			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "DoubleNativeTree", featureType, loadedForest, "../../../test.csv", reps)
-			#Makefile += "\t$(COMPILER) $(FLAGS) DoubleNativeTree.h DoubleNativeTree.cpp testDoubleNativeTree.cpp -o testDoubleNativeTree\n"
+			converter = ForestConverter(DoubleNativeTreeConverter(dim, "DoubleNativeTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "DoubleNativeTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) DoubleNativeTree.h DoubleNativeTree.cpp testDoubleNativeTree.cpp -o testDoubleNativeTree\n"
 
-			#converter = ForestConverter(ChainNativeTreeConverter(dim, "ChainNativeTree", featureType))
-			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "ChainNativeTree", featureType, loadedForest, "../../../test.csv", reps)
-			#Makefile += "\t$(COMPILER) $(FLAGS) ChainNativeTree.h ChainNativeTree.cpp testChainNativeTree.cpp -o testChainNativeTree\n"
+			converter = ForestConverter(ChainNativeTreeConverter(dim, "ChainNativeTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "ChainNativeTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) ChainNativeTree.h ChainNativeTree.cpp testChainNativeTree.cpp -o testChainNativeTree\n"
 
-			#converter = ForestConverter(SkipNativeTreeConverter(dim, "SkipNativeTree", featureType))
-			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "SkipNativeTree", featureType, loadedForest, "../../../test.csv", reps)
-			#Makefile += "\t$(COMPILER) $(FLAGS) SkipNativeTree.h SkipNativeTree.cpp testSkipNativeTree.cpp -o testSkipNativeTree\n"
+			converter = ForestConverter(SkipNativeTreeConverter(dim, "SkipNativeTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "SkipNativeTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) SkipNativeTree.h SkipNativeTree.cpp testSkipNativeTree.cpp -o testSkipNativeTree\n"
 
-			#converter = ForestConverter(RootNativeTreeConverter(dim, "RootNativeTree", featureType))
-			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "RootNativeTree", featureType, loadedForest, "../../../test.csv", reps)
-			#Makefile += "\t$(COMPILER) $(FLAGS) RootNativeTree.h RootNativeTree.cpp testRootNativeTree.cpp -o testRootNativeTree\n"
+			converter = ForestConverter(RootNativeTreeConverter(dim, "RootNativeTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "RootNativeTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) RootNativeTree.h RootNativeTree.cpp testRootNativeTree.cpp -o testRootNativeTree\n"
 
-			#converter = ForestConverter(StaticNativeTreeConverter(dim, "StaticNativeTree", featureType))
-			#generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "StaticNativeTree", featureType, loadedForest, "../../../test.csv", reps)
-			#Makefile += "\t$(COMPILER) $(FLAGS) StaticNativeTree.h StaticNativeTree.cpp testStaticNativeTree.cpp -o testStaticNativeTree\n"
+			converter = ForestConverter(StaticNativeTreeConverter(dim, "StaticNativeTree", featureType))
+			generateClassifier(cppPath + "/", targetAcc, dim, numTest, converter, "StaticNativeTree", featureType, loadedForest, "../../../test.csv", reps)
+			Makefile += "\t$(COMPILER) $(FLAGS) StaticNativeTree.h StaticNativeTree.cpp testStaticNativeTree.cpp -o testStaticNativeTree\n"
 
 			if target == "intel":
 				compiler = "g++"
