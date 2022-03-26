@@ -20,10 +20,10 @@ class FeatSkipIfTreeConverter(TreeConverter):
 # OWN CODING #######################################################################################################################
 
                 code += self.getImplementation(treeID, head.leftChild, level + 1)
-                code += tabs + self.skipProbChild(head, (head.leftChild), 3)
+                code += tabs + self.skipProbChild(head, (head.leftChild), 2)
                 code += tabs + "} else {\n"     # else part
                 code += self.getImplementation(treeID, head.rightChild, level + 1)
-                code += tabs + self.skipProbChild(head, (head.rightChild), 3)
+                code += tabs + self.skipProbChild(head, (head.rightChild), 2)
                 code += tabs + "}\n"
 
 ####################################################################################################################################
