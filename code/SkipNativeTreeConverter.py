@@ -166,7 +166,7 @@ class SkipNativeTreeConverter(SkipNativeTreeConverter):
 
 # OWN CODING #######################################################################################################################
 
-                counter = 3 # 'depth'
+                counter = 4 # 'depth'
                 currentNode = node
                 while (counter > 1):
                     if currentNode.probLeft is not None: # when there is leftChild

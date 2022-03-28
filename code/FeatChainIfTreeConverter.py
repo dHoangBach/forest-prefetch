@@ -22,12 +22,12 @@ class FeatChainIfTreeConverter(TreeConverter):
                 code += self.getImplementation(treeID, head.leftChild, level + 1)
                 if head.leftChild.feature is not None:
                     code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.leftChild.feature))
-                code += self.chainProbChild(head, (head.leftChild), 3, "", tabs)
+                code += self.chainProbChild(head, (head.leftChild), 4, "", tabs)
                 code += tabs + "} else {\n"     # else part
                 code += self.getImplementation(treeID, head.rightChild, level + 1)
                 if head.rightChild.feature is not None:
                     code += tabs + """     __builtin_prefetch ( &pX[{tree}] );\n""".replace("{tree}", str(head.rightChild.feature))
-                code += self.chainProbChild(head, (head.rightChild), 3, "", tabs)
+                code += self.chainProbChild(head, (head.rightChild), 4, "", tabs)
                 code += tabs + "}\n"
         return code
 

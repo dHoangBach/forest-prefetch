@@ -24,12 +24,12 @@ class LabelSkipIfTreeConverter(TreeConverter):
             code += tabs + "    if(pX[" + str(head.feature) + "] <= " + str(head.split) + "){\n"
             code += "label_{number}:\n".replace("{number}", str(head.leftChild))                
             code += self.getImplementation(treeID, head.leftChild, level + 1, 1)
-            code += tabs + self.skipProbChild(head, (head.leftChild), 2)
+            code += tabs + self.skipProbChild(head, (head.leftChild), 3)
                 # else
             code += tabs + "    } else {\n"
             code += "label_{number}:\n".replace("{number}", str(head.rightChild))                
             code += self.getImplementation(treeID, head.rightChild, level + 1, 1)
-            code += tabs + self.skipProbChild(head, (head.rightChild), 2)
+            code += tabs + self.skipProbChild(head, (head.rightChild), 3)
             code += tabs + "    }\n"
         return code
 
