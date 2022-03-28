@@ -25,13 +25,13 @@ class LabelChainIfTreeConverter(TreeConverter):
             code += "label_{number}:\n".replace("{number}", str(head.leftChild))                
             code += self.getImplementation(treeID, head.leftChild, level + 1, 1)
             code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(head.leftChild))
-            code += self.chainProbChild(head, (head.leftChild), 3, "", tabs)
+            code += self.chainProbChild(head, (head.leftChild), 4, "", tabs)
                 # else
             code += tabs + "    } else {\n"
             code += "label_{number}:\n".replace("{number}", str(head.rightChild))                
             code += self.getImplementation(treeID, head.rightChild, level + 1, 1)
             code += tabs + """     __builtin_prefetch ( &&label_{tree} );\n""".replace("{tree}", str(head.rightChild))
-            code += self.chainProbChild(head, (head.rightChild), 3, "", tabs)
+            code += self.chainProbChild(head, (head.rightChild), 4, "", tabs)
             code += tabs + "    }\n"
         return code
 

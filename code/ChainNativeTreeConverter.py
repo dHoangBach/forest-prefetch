@@ -212,7 +212,7 @@ class ChainNativeTreeConverter(ChainNativeTreeConverter):
 
 # OWN CODING #######################################################################################################################
 
-            counter = 4 # amount of prefetches
+            counter = 5 # amount of prefetches
             current = "i" # initial value
             cppCode += """
                         __builtin_prefetch ( &tree{treeID}[i] );""".replace("{treeID}", str(treeID))
