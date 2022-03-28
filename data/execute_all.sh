@@ -6,6 +6,8 @@ then
       exit 1
 fi
 
+./init_all.sh
+./train_all.sh
 echo "Executing $1"
 ./generate_all.sh $1
 ./compile_all.sh $1
