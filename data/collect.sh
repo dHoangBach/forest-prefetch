@@ -15,7 +15,7 @@ fi
     # $bname file name
     # $(basename $(dirname $d)) last folder/forest ensemble name
     # $(./$bname) output of file (test)
-    # $(stat --printf="%s" $bname) site in bytes
+    # $(stat --printf="%s" $bname) size in bytes
 for d in $(find ./$1/cpp/$2/*/ -type f -executable -name "test*Tree"); do
       cd $(dirname $d)
       bname=$(basename $d)
