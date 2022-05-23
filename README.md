@@ -1,4 +1,7 @@
 # forest-prefetch
+The original framework is provided by Sebastian Buschjäger and is extended here.
+Original: https://bitbucket.org/sbuschjaeger/arch-forest/src/master/
+
 
 * ``code/`` contains the actual forest and tree code synthesizer discussed in the paper  
 * ``data/`` contains scripts and files for running the experiments. Each folder represents one data set used in the experiments. There are a couple of scripts for convienience. Let ``dataset`` be a dataset of choice, then
